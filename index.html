@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Laporan Harian 3 Toko</title>
+<style>
+[hidden]{display:none!important}
+body{margin:0}
+:root{--bg:#f3f5f2;--card:#fff;--ink:#16302b;--mute:#5d726d;--line:#d6dfda;--accent:#0f6b5c;--accent-ink:#fff;--warn:#b45309;--ok:#0f7a4a;--fill:#fff8dc;--auto:#e6f3ec;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a18;--card:#172623;--ink:#e6efec;--mute:#9bb2ac;--line:#2b403b;--accent:#3fbf9f;--accent-ink:#06201a;--warn:#f0b35a;--ok:#5bd69a;--fill:#3a3418;--auto:#1b3a33;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1a18;--card:#172623;--ink:#e6efec;--mute:#9bb2ac;--line:#2b403b;--accent:#3fbf9f;--accent-ink:#06201a;--warn:#f0b35a;--ok:#5bd69a;--fill:#3a3418;--auto:#1b3a33;color-scheme:dark}
+html{box-sizing:border-box;scroll-padding-top:env(safe-area-inset-top,0px);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:880px;margin:0 auto;padding-block:12px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:20px;margin:6px 0 10px;letter-spacing:-.01em}
+h2{font-size:16px;margin:0 0 10px}
+.stores,.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.stores button{flex:1;min-width:100px;padding:12px 8px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:600 15px inherit;cursor:pointer}
+.stores button[aria-pressed=true]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.tabs button{padding:8px 14px;border:0;border-bottom:3px solid transparent;background:none;color:var(--mute);font:600 14px inherit;cursor:pointer}
+.tabs button[aria-pressed=true]{color:var(--ink);border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+label{display:block;font-size:12.5px;color:var(--mute);margin-bottom:3px}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:var(--fill);color:var(--ink);font:inherit}
+.calc{background:var(--auto);border-radius:7px;padding:8px 10px}
+.calc b{display:block;font-size:17px}
+input[data-money]{text-align:right;font-variant-numeric:tabular-nums}
+.calc small{color:var(--mute)}
+.btn{padding:10px 16px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-ink);font:600 14px inherit;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.warn{color:var(--warn)}.ok{color:var(--ok)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mute);font-weight:600}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:12px}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi small{color:var(--mute)}.kpi b{display:block;font-size:19px;margin-top:2px}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+#sync{font:600 12px system-ui,sans-serif;padding:3px 9px;border-radius:99px;background:var(--line);color:var(--mute);vertical-align:middle;margin-left:6px}
+#sync[data-s=ok]{background:var(--auto);color:var(--ok)}#sync[data-s=err]{color:var(--warn)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-bottom:12px}
+.sc{display:flex;gap:12px;align-items:center;text-align:left;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer}
+.sc[aria-pressed=true]{border-color:var(--accent)}
+.sc span{display:grid;gap:1px}.sc small{color:var(--mute)}
+svg.ch{width:100%;height:auto;display:block}
+.gl{stroke:var(--line);stroke-width:1}.tx{font:11px system-ui,sans-serif;fill:var(--mute)}
+.bar0{fill:#1f9d8a}.ly{fill:none;stroke:#e08a1e;stroke-width:2.5}.tg{stroke:var(--mute);stroke-dasharray:5 4;stroke-width:1.5}.ln{fill:none;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.rg{fill:none;stroke:var(--line);stroke-width:7}.rf{fill:none;stroke-width:7;stroke-linecap:round}.rt{font:700 13px system-ui,sans-serif;fill:var(--ink)}
+.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-bottom:6px}.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.hb{display:grid;grid-template-columns:minmax(90px,1.2fr) 2fr auto;gap:8px;align-items:center;font-size:13px;margin-bottom:6px}.hb .bar{margin:0}
+.split{display:flex;height:28px;border-radius:7px;overflow:hidden}.split div{display:grid;place-items:center;color:#fff;font-size:12px;font-weight:600;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+#login{max-width:420px;margin:0 auto 12px}#login .grid{grid-template-columns:1fr}#login p{margin:8px 0 0;font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<h1>Laporan Harian Toko <span id="sync" role="status">Mode lokal</span></h1>
+<form class="card" id="login" hidden><h2>Masuk untuk sinkron antar perangkat</h2><div class="grid"><div><label for="lg-email">Email</label><input id="lg-email" type="email" autocomplete="username" required></div><div><label for="lg-pass">Kata sandi</label><input id="lg-pass" type="password" autocomplete="current-password" required></div></div><div class="row" style="margin-top:10px"><button class="btn" type="submit">Masuk</button></div><p id="lg-msg" class="warn" role="alert"></p><p style="color:var(--mute)">Sebelum masuk, data hanya tersimpan di perangkat ini.</p></form>
+<div class="stores" id="stores" role="group" aria-label="Pilih toko"></div>
+<div class="tabs" id="tabs" role="group" aria-label="Menu"></div>
+<div id="app"></div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ISI SEKALI: tempel konfigurasi web app dari Firebase (lihat README.md). Biarkan null untuk mode lokal.
+const FIREBASE_CONFIG=null;
+const KEY='laporan-3-toko-v1';
+const CATS=['Insentif Casual','beban pengiriman','beban listrik','tagihan internet','beban air','beban pemeliharaan peralatan','beban pemeliharaan gedung','beban percetakan dan atk','beban rumah tangga','beban donasi & sumbangan','beban iuran bulanan','Lainnya'];
+let S=null;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.stores)S={stores:[{name:'NICESO 68',target:664167380,atv:70000,upt:6},{name:'Toko 2',target:0,atv:70000,upt:6},{name:'Toko 3',target:0,atv:70000,upt:6}],days:{}};
+let cur=0,view='input',date=iso(new Date());
+const $=s=>document.querySelector(s);
+function iso(d){const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
+const n=v=>parseFloat(v)||0;
+const rp=v=>'Rp '+Math.round(v).toLocaleString('id-ID');
+const nf=v=>Math.round(v).toLocaleString('id-ID');
+const fv=v=>{const r=String(v??'').replace(/\D/g,'');return r?Number(r).toLocaleString('id-ID'):''};
+const V=t=>t.dataset.money!=null?t.value.replace(/\D/g,''):t.value;
+function fmtMoney(t){const pos=t.selectionStart||0,before=t.value.slice(0,pos).replace(/\D/g,'').length,r=t.value.replace(/\D/g,'');t.value=r?Number(r).toLocaleString('id-ID'):'';let c=0,i=0;while(i<t.value.length&&c<before){if(/\d/.test(t.value[i]))c++;i++}try{t.setSelectionRange(i,i)}catch(e){}}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function day(i,d){const k=i+'|'+d;return S.days[k]||(S.days[k]={siang:{},malam:{},exp:[]})}
+function peek(i,d){return S.days[i+'|'+d]}
+function calc(sh,st){const s=n(sh.sales),t=n(sh.trx),u=n(sh.unit);const atv=t?s/t:0,upt=t?u/t:0;return{s,t,u,atv,upt,aa:st.atv?atv/st.atv:0,au:st.upt?upt/st.upt:0}}
+function dayTotals(i,d){const x=peek(i,d);if(!x)return null;const st=S.stores[i];const a=calc(x.siang,st),b=calc(x.malam,st);const ex=(x.exp||[]).reduce((q,e)=>q+n(e.qty)*n(e.harga),0);
+return{omset:a.s+b.s,trx:a.t+b.t,unit:a.u+b.u,pu:n(x.siang.pu)+n(x.malam.pu),pn:n(x.siang.pn)+n(x.malam.pn),exp:ex,nexp:(x.exp||[]).length,ly:n(x.ly)}}
+function monthDays(i,d){const pre=d.slice(0,7);return Object.keys(S.days).filter(k=>k.startsWith(i+'|'+pre)).map(k=>k.split('|')[1]).sort().filter(x=>{const t=dayTotals(i,x);return t&&(t.omset>0||t.exp>0)})}
+function monthSum(i,d){const r={omset:0,ly:0,trx:0,unit:0,exp:0,pu:0,pn:0,days:monthDays(i,d)};r.days.forEach(x=>{const t=dayTotals(i,x);r.omset+=t.omset;r.ly+=t.ly;r.trx+=t.trx;r.unit+=t.unit;r.exp+=t.exp;r.pu+=t.pu;r.pn+=t.pn});return r}
+const pct=v=>(v*100).toFixed(1)+'%';
+const gr=(a,b)=>b?((a>=b?'+':'')+((a-b)/b*100).toFixed(1)+'%'):'-';
+const hari=d=>new Date(d+'T00:00:00').toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+function head(){
+ $('#stores').innerHTML=S.stores.map((s,i)=>`<button aria-pressed="${i==cur}" data-store="${i}">${esc(s.name)}</button>`).join('');
+ $('#tabs').innerHTML=[['dash','Dashboard'],['input','Input harian'],['rekap','Rekap bulan'],['banding','Data pembanding'],['set','Pengaturan'],['help','Petunjuk']].map(([k,l])=>`<button aria-pressed="${view==k}" data-view="${k}">${l}</button>`).join('');
+}
+function render(){head();$('#app').innerHTML=view=='input'?vInput():view=='rekap'?vRekap():view=='dash'?vDash():view=='banding'?vBanding():view=='help'?vHelp():vSet();paintBanding()}
+
+function shiftCard(key,label){
+ const x=day(cur,date)[key];
+ const f=(k,l,t='number')=>`<div><label for="${key}-${k}">${l}</label><input id="${key}-${k}" type="${t=='money'?'text':t}" ${t=='number'?'inputmode="numeric" min="0"':t=='money'?'inputmode="numeric" data-money="1" placeholder="0"':''} data-sh="${key}" data-f="${k}" value="${t=='money'?fv(x[k]):esc(x[k])}"></div>`;
+ return `<section class="card"><h2>Shift ${label}</h2><div class="grid">${f('kasir','Nama kasir','text')}${f('sales','Sales (Rp)','money')}${f('trx','Total transaksi')}${f('unit','Total unit')}${f('pu','Unit promo terjual')}${f('pn','Nilai promo (Rp)','money')}</div>
+ <div class="grid" style="margin-top:10px" id="calc-${key}"></div></section>`}
+function calcHtml(key){const st=S.stores[cur],c=calc(day(cur,date)[key],st);
+ const m=(l,v,a)=>`<div class="calc"><small>${l}</small><b>${v}</b><small class="${a>=1?'ok':'warn'}">${a>=1?'Tercapai':'Capai'} ${pct(a)}</small></div>`;
+ return m('ATV (Rp/transaksi)',rp(c.atv),c.aa)+m('UPT (unit/transaksi)',c.upt.toFixed(2),c.au)}
+function vInput(){
+ const x=day(cur,date);
+ return `<div class="card"><div class="grid"><div><label for="tgl">Tanggal laporan</label><input id="tgl" type="date" value="${date}"></div>
+ <div class="calc"><small>Omset hari ini</small><b id="omset">${rp(0)}</b><small id="omsetAkum"></small></div>
+ <div><label for="ly">Omset tahun lalu, hari sama (Rp)</label><input id="ly" type="text" inputmode="numeric" data-money="1" placeholder="0" data-ly="1" value="${fv(x.ly)}"></div>
+ <div class="calc"><small>Banding tahun lalu</small><b id="lyG">-</b><small id="lyA"></small></div></div></div>
+ ${shiftCard('siang','Siang')}${shiftCard('malam','Malam')}
+ <section class="card"><h2>Pengeluaran hari ini</h2>
+ <div class="grid"><div><label for="ec">Kategori</label><select id="ec">${CATS.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div>
+ <div><label for="ei">Item / keterangan</label><input id="ei" type="text"></div>
+ <div><label for="eq">Qty</label><input id="eq" type="number" inputmode="numeric" min="0" value="1"></div>
+ <div><label for="eh">Harga satuan (Rp)</label><input id="eh" type="text" inputmode="numeric" data-money="1" placeholder="0"></div></div>
+ <div class="row" style="margin-top:10px"><button class="btn" data-act="addExp">Tambah pengeluaran</button><span id="expTot"></span></div>
+ <div class="scroll" id="expList"></div></section>
+ <div class="row"><button class="btn" data-act="wa">Salin laporan untuk WhatsApp</button><span class="ok" id="saved">Tersimpan otomatis di perangkat ini</span></div>`}
+function paintInput(){
+ if(view!='input')return;
+ ['siang','malam'].forEach(k=>{const e=$('#calc-'+k);if(e)e.innerHTML=calcHtml(k)});
+ const t=dayTotals(cur,date)||{omset:0,exp:0};const ms=monthSum(cur,date);
+ $('#omset').textContent=rp(t.omset);
+ $('#omsetAkum').textContent='Akumulasi bulan: '+rp(ms.omset);
+ $('#lyG').textContent=t.ly?gr(t.omset,t.ly)+' ('+rp(t.omset-t.ly)+')':'Isi omset tahun lalu';
+ $('#lyA').textContent='Growth akumulasi: '+(ms.ly?gr(ms.omset,ms.ly):'-');
+ const x=day(cur,date);
+ $('#expTot').textContent='Total: '+rp(t.exp);
+ $('#expList').innerHTML=x.exp.length?`<table><tr><th>Kategori</th><th>Item</th><th>Qty</th><th>Harga</th><th>Total</th><th></th></tr>${x.exp.map((e,i)=>`<tr><td>${esc(e.cat)}</td><td>${esc(e.item)}</td><td>${nf(n(e.qty))}</td><td>${nf(n(e.harga))}</td><td>${nf(n(e.qty)*n(e.harga))}</td><td><button class="btn alt" data-del="${i}" aria-label="Hapus">Hapus</button></td></tr>`).join('')}</table>`:'<p style="color:var(--mute)">Belum ada pengeluaran. Isi form di atas lalu tekan Tambah.</p>'}
+
+function vRekap(){
+ const st=S.stores[cur],m=monthSum(cur,date),a=st.target?m.omset/st.target:0;
+ const rows=m.days.map(d=>{const t=dayTotals(cur,d);return `<tr><td>${d.slice(8)}/${d.slice(5,7)}</td><td>${nf(t.omset)}</td><td>${t.ly?nf(t.ly):'-'}</td><td>${t.ly?gr(t.omset,t.ly):'-'}</td><td>${nf(t.trx)}</td><td>${nf(t.unit)}</td><td>${t.trx?nf(t.omset/t.trx):'-'}</td><td>${t.trx?(t.unit/t.trx).toFixed(2):'-'}</td><td>${nf(t.exp)}</td></tr>`}).join('');
+ return `<div class="row" style="margin-bottom:10px"><div><label for="tgl">Bulan</label><input id="tgl" type="date" value="${date}"></div></div>
+ <div class="kpi"><div><small>Omset bulan ini</small><b>${rp(m.omset)}</b></div>
+ <div><small>Omset tahun lalu (periode sama)</small><b>${m.ly?rp(m.ly):'Belum diisi'}</b><small>Growth ${m.ly?gr(m.omset,m.ly):'-'}</small></div>
+ <div><small>Target bulanan</small><b>${st.target?rp(st.target):'Belum diisi'}</b><div class="bar"><i style="width:${Math.min(100,a*100)}%"></i></div><small>Pencapaian ${pct(a)}</small></div>
+ <div><small>APT bulan ini</small><b>${m.trx?rp(m.omset/m.trx):'-'}</b></div>
+ <div><small>UPT bulan ini</small><b>${m.trx?(m.unit/m.trx).toFixed(2):'-'}</b></div>
+ <div><small>Pengeluaran bulan ini</small><b>${rp(m.exp)}</b><small>${m.omset?pct(m.exp/m.omset)+' dari omset':''}</small></div></div>
+ <div class="card scroll"><table><tr><th>Tgl</th><th>Omset</th><th>Thn lalu</th><th>Growth</th><th>Transaksi</th><th>Unit</th><th>APT</th><th>UPT</th><th>Pengeluaran</th></tr>${rows||'<tr><td colspan="9" style="text-align:left">Belum ada data bulan ini.</td></tr>'}</table></div>
+ <div class="row"><button class="btn" data-act="waRekap">Salin rekap bulan</button><button class="btn alt" data-act="csv">Unduh CSV</button></div>
+ <p style="color:var(--mute)">Semua toko: ${S.stores.map((s,i)=>esc(s.name)+' '+rp(monthSum(i,date).omset)).join(' | ')}</p>`}
+
+function lyRows(){const p=date.split('-').map(Number),dim=new Date(p[0],p[1],0).getDate(),o=[];for(let d=1;d<=dim;d++)o.push(p[0]+'-'+String(p[1]).padStart(2,'0')+'-'+String(d).padStart(2,'0'));return o}
+function vBanding(){
+ const rows=lyRows().map(d=>{const x=peek(cur,d)||{},t=dayTotals(cur,d)||{omset:0,ly:0};
+  return `<tr><td>${d.slice(8)}/${d.slice(5,7)}</td><td>${new Date(d+'T00:00:00').toLocaleDateString('id-ID',{weekday:'long'})}</td><td>${t.omset?nf(t.omset):'-'}</td><td><input type="text" inputmode="numeric" data-money="1" placeholder="0" style="min-width:140px" aria-label="Omset tahun lalu tanggal ${d}" data-lyd="${d}" value="${fv(x.ly)}"></td><td class="g">${t.ly&&t.omset?gr(t.omset,t.ly):'-'}</td></tr>`}).join('');
+ return `<div class="card"><h2>Data sales pembanding (tahun lalu)</h2>
+ <p style="margin-top:0;color:var(--mute)">Isi omset tahun lalu untuk setiap tanggal di bulan yang dipilih. Data tersimpan otomatis dan langsung dipakai di laporan harian, rekap, dan WhatsApp.</p>
+ <div class="grid"><div><label for="tgl">Bulan (pilih tanggal mana saja di bulan itu)</label><input id="tgl" type="date" value="${date}"></div></div>
+ <label for="bulk" style="margin-top:12px">Cara cepat: tempel daftar angka, satu baris untuk satu hari, mulai dari tanggal 1 (baris kosong dilewati)</label>
+ <textarea id="bulk" rows="4" style="width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:var(--fill);color:var(--ink);font:inherit" placeholder="30000000&#10;28500000&#10;19800000"></textarea>
+ <div class="row" style="margin-top:8px"><button class="btn" data-act="applyLy">Terapkan ke tabel</button></div></div>
+ <div class="card scroll"><table><tr><th>Tgl</th><th>Hari</th><th>Omset tahun ini</th><th>Omset tahun lalu (isi di sini)</th><th>Growth</th></tr>${rows}
+ <tr><td colspan="2"><b>Total</b></td><td id="bT">-</td><td id="bL">-</td><td id="bG">-</td></tr></table></div>`}
+function paintBanding(){if(view!='banding'||!$('#bT'))return;let o=0,l=0,a=0;lyRows().forEach(d=>{const t=dayTotals(cur,d);if(t){o+=t.omset;l+=t.ly;if(t.ly)a+=t.omset}});$('#bT').textContent=nf(o);$('#bL').textContent=nf(l);$('#bG').textContent=l?gr(a,l):'-'}
+const COL=['#1f9d8a','#e08a1e','#4b7bec'];
+const short=v=>v>=1e6?(v/1e6).toFixed(v>=1e7?0:1).replace('.',',')+' jt':v>=1e3?Math.round(v/1e3)+' rb':String(Math.round(v));
+function mdays(d){const p=d.split('-').map(Number);return new Date(p[0],p[1],0).getDate()}
+function axis(W,H,L,R,T,B,mx){let g='';[0,.5,1].forEach(f=>{const v=mx/1.1*f,yy=T+(H-T-B)*(1-v/mx);g+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" class="gl"/><text x="${L-4}" y="${yy+4}" text-anchor="end" class="tx">${short(v)}</text>`});return g}
+function svgDaily(i){const ds=lyRows(),W=640,H=230,L=46,B=24,T=10,R=8,cw=(W-L-R)/ds.length,vals=ds.map(d=>dayTotals(i,d)||{omset:0,ly:0}),tg=S.stores[i].target?S.stores[i].target/ds.length:0,mx=Math.max(1,tg,...vals.map(v=>Math.max(v.omset,v.ly)))*1.1,y=v=>T+(H-T-B)*(1-v/mx);
+ let g=axis(W,H,L,R,T,B,mx);
+ vals.forEach((v,k)=>{const x=L+k*cw;if(v.omset)g+=`<rect x="${x+1}" y="${y(v.omset)}" width="${Math.max(1,cw-2)}" height="${H-B-y(v.omset)}" rx="2" class="bar0"><title>${ds[k].slice(8)}: ${rp(v.omset)}</title></rect>`;if(k%5==0||k==ds.length-1)g+=`<text x="${x+cw/2}" y="${H-6}" text-anchor="middle" class="tx">${k+1}</text>`});
+ const pts=vals.map((v,k)=>v.ly?(L+k*cw+cw/2)+','+y(v.ly):null).filter(Boolean).join(' ');
+ if(pts)g+=`<polyline points="${pts}" class="ly"/>`;
+ if(tg)g+=`<line x1="${L}" x2="${W-R}" y1="${y(tg)}" y2="${y(tg)}" class="tg"/>`;
+ return `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik omset harian">${g}</svg>`}
+function svgStores(){const ds=lyRows(),W=640,H=220,L=46,B=24,T=10,R=8;
+ const ser=S.stores.map((s,i)=>{let a=0,last=-1;const arr=ds.map((d,k)=>{const t=dayTotals(i,d);if(t&&t.omset>0)last=k;a+=t?t.omset:0;return a});return arr.slice(0,last+1)});
+ const mx=Math.max(1,...ser.map(a=>a[a.length-1]||0))*1.1,sx=k=>L+(W-L-R)*k/Math.max(1,ds.length-1),y=v=>T+(H-T-B)*(1-v/mx);
+ let g=axis(W,H,L,R,T,B,mx);
+ ds.forEach((d,k)=>{if(k%5==0||k==ds.length-1)g+=`<text x="${sx(k)}" y="${H-6}" text-anchor="middle" class="tx">${k+1}</text>`});
+ ser.forEach((a,i)=>{if(a.length)g+=`<polyline points="${a.map((v,k)=>sx(k)+','+y(v)).join(' ')}" style="stroke:${COL[i]}" class="ln"/>`});
+ return `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="Omset akumulasi tiga toko">${g}</svg>`}
+function ring(p,c){const r=26,C=2*Math.PI*r,q=Math.min(1,p);return `<svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><circle cx="32" cy="32" r="${r}" class="rg"/><circle cx="32" cy="32" r="${r}" class="rf" style="stroke:${c}" stroke-dasharray="${C*q} ${C}" transform="rotate(-90 32 32)"/><text x="32" y="36" text-anchor="middle" class="rt">${Math.round(p*100)}%</text></svg>`}
+function vDash(){
+ const st=S.stores[cur],m=monthSum(cur,date),dim=mdays(date),k=m.days.length,avg=k?m.omset/k:0,proj=avg*dim;
+ let best=null,sg=0,ml=0;const cat={};
+ m.days.forEach(d=>{const t=dayTotals(cur,d),x=peek(cur,d);if(!best||t.omset>best.o)best={d,o:t.omset};sg+=n(x.siang.sales);ml+=n(x.malam.sales);(x.exp||[]).forEach(e=>{cat[e.cat]=(cat[e.cat]||0)+n(e.qty)*n(e.harga)})});
+ const cs=Object.entries(cat).sort((a,b)=>b[1]-a[1]).slice(0,6),cm=cs.length?cs[0][1]:1,tot=sg+ml;
+ const cards=S.stores.map((s,i)=>{const q=monthSum(i,date),a=s.target?q.omset/s.target:0;return `<button class="sc" data-store="${i}" aria-pressed="${i==cur}">${ring(a,COL[i])}<span><b>${esc(s.name)}</b><small>${rp(q.omset)}</small><small>${q.ly?'Vs tahun lalu '+gr(q.omset,q.ly):'Target '+(s.target?short(s.target):'belum diisi')}</small></span></button>`}).join('');
+ return `<div class="grid" style="margin-bottom:10px"><div><label for="tgl">Bulan</label><input id="tgl" type="date" value="${date}"></div></div>
+ <div class="grid3">${cards}</div>
+ <section class="card"><h2>Omset akumulasi 3 toko</h2><div class="leg">${S.stores.map((s,i)=>`<span><i style="background:${COL[i]}"></i>${esc(s.name)}</span>`).join('')}</div>${svgStores()}</section>
+ <section class="card"><h2>Omset harian ${esc(st.name)}</h2><div class="leg"><span><i style="background:#1f9d8a"></i>Omset hari ini</span><span><i style="background:#e08a1e"></i>Tahun lalu</span>${st.target?'<span><i style="background:var(--mute)"></i>Target harian</span>':''}</div>${svgDaily(cur)}</section>
+ <div class="kpi"><div><small>Rata-rata per hari terisi</small><b>${k?rp(avg):'-'}</b></div><div><small>Proyeksi omset akhir bulan</small><b>${k?rp(proj):'-'}</b><small>${st.target&&k?pct(proj/st.target)+' dari target':''}</small></div><div><small>Omset harian tertinggi</small><b>${best?rp(best.o):'-'}</b><small>${best?best.d.slice(8)+'/'+best.d.slice(5,7):''}</small></div></div>
+ <section class="card"><h2>Penjualan Siang vs Malam</h2>${tot?`<div class="split"><div style="width:${sg/tot*100}%;background:#1f9d8a">Siang ${pct(sg/tot)}</div><div style="width:${ml/tot*100}%;background:#4b7bec">Malam ${pct(ml/tot)}</div></div><p style="margin:8px 0 0;color:var(--mute)">Siang ${rp(sg)} | Malam ${rp(ml)}</p>`:'<p style="color:var(--mute)">Belum ada data shift bulan ini.</p>'}</section>
+ <section class="card"><h2>Pengeluaran terbesar per kategori</h2>${cs.length?cs.map(([c,v])=>`<div class="hb"><span>${esc(c)}</span><div class="bar"><i style="width:${v/cm*100}%"></i></div><b>${nf(v)}</b></div>`).join(''):'<p style="color:var(--mute)">Belum ada pengeluaran bulan ini.</p>'}</section>`}
+let DB=null,cfgT=null;const tm={},pend={};
+function setSync(s,t){const e=$('#sync');if(e){e.textContent=t;e.dataset.s=s}}
+function errS(e){setSync('err',e&&e.code=='permission-denied'?'Akun ini tidak boleh mengubah data bersama':'Gagal sinkron')}
+const clone=o=>JSON.parse(JSON.stringify(o));
+function push(i,d,part){if(!DB)return;const k=i+'_'+d+'_'+part;clearTimeout(tm[k]);pend[k]=1;setSync('save','Menyimpan...');
+ tm[k]=setTimeout(async()=>{delete tm[k];const x=day(i,d);try{await DB.doc('days/'+k).set({store:+i,date:d,part,data:part=='ly'?String(x.ly??''):clone(x[part]||(part=='exp'?[]:{}))});if(!tm[k])setSync('ok','Tersinkron')}catch(e){errS(e)}if(!tm[k])delete pend[k]},700)}
+function pushCfg(){if(!DB)return;clearTimeout(cfgT);setSync('save','Menyimpan...');cfgT=setTimeout(async()=>{cfgT=null;try{await DB.doc('config/stores').set({list:clone(S.stores)});setSync('ok','Tersinkron')}catch(e){errS(e)}},700)}
+function after(){const a=document.activeElement;if(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)){paintInput();paintBanding()}else{render();paintInput()}}
+function applyDays(sn){sn.docs.forEach(s=>{if(!s.exists)return;const v=s.data();if(!v||v.store==null)return;const k=v.store+'_'+v.date+'_'+v.part;if(pend[k])return;const x=day(v.store,v.date);if(v.part=='ly')x.ly=v.data;else x[v.part]=clone(v.data)});save();after()}
+async function uploadLocal(){if(!DB){toast('Sinkron belum aktif');return}setSync('save','Mengunggah...');
+ try{await DB.doc('config/stores').set({list:clone(S.stores)});
+  for(const k of Object.keys(S.days)){const q=k.split('|'),x=S.days[k];for(const p of ['siang','malam','exp','ly']){const v=p=='ly'?String(x.ly??''):x[p];if(!v||(typeof v=='object'&&!Object.keys(v).length))continue;await DB.doc('days/'+q[0]+'_'+q[1]+'_'+p).set({store:+q[0],date:q[1],part:p,data:p=='ly'?v:clone(v)})}}
+  setSync('ok','Tersinkron');toast('Data perangkat ini sudah diunggah')}catch(e){errS(e)}}
+let AUTHED=false,UNSUBS=[],FS=null;
+function stopSync(){UNSUBS.forEach(f=>{try{f()}catch(e){}});UNSUBS=[];DB=null}
+function startSync(fs){
+ stopSync();DB=fs;let ok=false;setSync('save','Menghubungkan...');
+ const t=setTimeout(()=>{if(!ok)setSync('err','Belum terhubung, memakai data perangkat ini')},10000);
+ UNSUBS.push(fs.collection('days').onSnapshot(sn=>{if(sn.metadata.fromCache===false&&!ok){ok=true;clearTimeout(t);setSync('ok','Tersinkron')}applyDays(sn)},()=>setSync('err','Sinkron terputus')));
+ UNSUBS.push(fs.doc('config/stores').onSnapshot(s=>{if(s.exists){const l=s.data().list;if(!cfgT&&l){S.stores=clone(l);save();after()}}else if(s.metadata.fromCache===false&&S.stores.some(z=>z.target))pushCfg()},()=>{}))}
+function initSync(){
+ if(!FIREBASE_CONFIG||!window.firebase){setSync('local','Mode lokal');return}
+ try{firebase.initializeApp(FIREBASE_CONFIG)}catch(e){setSync('err','Konfigurasi Firebase salah');return}
+ FS=firebase.firestore();const auth=firebase.auth();
+ $('#login').addEventListener('submit',async ev=>{ev.preventDefault();$('#lg-msg').textContent='';
+  try{await auth.signInWithEmailAndPassword($('#lg-email').value.trim(),$('#lg-pass').value)}
+  catch(e){$('#lg-msg').textContent='Email atau kata sandi salah.'}});
+ auth.onAuthStateChanged(u=>{AUTHED=!!u;$('#login').hidden=AUTHED;
+  if(u)startSync(FS);else{stopSync();setSync('local','Mode lokal (belum masuk)')}
+  if(view=='set')render()})}
+function logout(){if(FIREBASE_CONFIG&&window.firebase)firebase.auth().signOut()}
+function vHelp(){
+ const sec=(t,items)=>`<section class="card"><h2>${t}</h2><ol style="margin:0;padding-left:20px;display:grid;gap:6px">${items.map(i=>`<li>${i}</li>`).join('')}</ol></section>`;
+ return sec('1. Persiapan awal (sekali saja, oleh SPV)',[
+ 'Buka tab <b>Pengaturan</b>. Pilih toko di bagian atas, lalu ubah <b>Nama toko</b>.',
+ 'Isi <b>Target omset bulanan</b>, cukup ketik angkanya; titik ribuan muncul otomatis (664167380 tampil 664.167.380).',
+ 'Isi <b>Target ATV</b> (contoh 70000) dan <b>Target UPT</b> (contoh 6). Ulangi untuk ketiga toko.',
+ 'Setiap awal bulan, ubah target omset sesuai bulan baru.'])
++sec('2. Mengisi laporan harian (oleh kasir tiap shift)',[
+ 'Pilih <b>toko</b> Anda dari tombol di atas. Pastikan namanya benar.',
+ 'Buka tab <b>Input harian</b>. Cek kolom <b>Tanggal laporan</b>; ganti jika bukan hari ini.',
+ 'Kasir Siang mengisi kartu <b>Shift Siang</b>, kasir Malam mengisi <b>Shift Malam</b>: nama kasir, sales (Rp), total transaksi, total unit, unit promo terjual, dan nilai promo (Rp). Kolom nominal otomatis diberi titik ribuan saat diketik, cukup ketik angkanya.',
+ 'Lihat kotak hijau di bawah form: <b>ATV</b> (sales dibagi transaksi) dan <b>UPT</b> (unit dibagi transaksi) terhitung otomatis. Tulisan oranye berarti belum capai target, hijau berarti tercapai.',
+ 'Data tersimpan otomatis setiap kali Anda mengetik. Tidak ada tombol simpan.',
+ 'Kotak <b>Omset hari ini</b> di atas menjumlahkan shift Siang dan Malam, lengkap dengan akumulasi bulan berjalan.',
+ 'Isi <b>Omset tahun lalu, hari sama</b> dengan omset toko pada tanggal yang sama di tahun lalu (lihat arsip laporan tahun lalu). Kotak <b>Banding tahun lalu</b> langsung menampilkan selisih dan growth harian, plus growth akumulasi bulan. Kosongkan jika tidak ada datanya. Untuk mengisi sebulan penuh sekaligus, pakai tab <b>Data pembanding</b>.'])
++sec('3. Mencatat pengeluaran',[
+ 'Di kartu <b>Pengeluaran hari ini</b>, pilih <b>Kategori</b> dari daftar.',
+ 'Isi <b>Item / keterangan</b>, <b>Qty</b>, dan <b>Harga satuan</b>.',
+ 'Tekan <b>Tambah pengeluaran</b>. Item muncul di tabel dan total terhitung otomatis. Satu baris untuk satu item.',
+ 'Salah input? Tekan <b>Hapus</b> di baris tersebut lalu input ulang.'])
++sec('4. Melaporkan ke atasan lewat WhatsApp',[
+ 'Setelah semua terisi, tekan <b>Salin laporan untuk WhatsApp</b> di bagian bawah tab Input harian.',
+ 'Muncul tulisan <b>Tersalin</b>. Buka chat WhatsApp atasan atau grup, tekan lama kolom ketik, pilih <b>Tempel</b>, lalu kirim.',
+ 'Laporan berisi omset hari ini, akumulasi bulan, pencapaian target, promo, perbandingan kasir Siang dan Malam, serta pengeluaran.',
+ 'Laporkan setelah shift Malam selesai agar angka hari itu lengkap.'])
++sec('5. Melihat rekap bulanan',[
+ 'Buka tab <b>Rekap bulan</b>. Bulan yang tampil mengikuti kolom tanggal; ganti tanggalnya untuk melihat bulan lain.',
+ 'Kartu atas menampilkan omset bulan ini, pencapaian target (dengan bar), omset tahun lalu beserta growth-nya, APT, UPT, dan pengeluaran. Tabel harian juga memuat kolom Thn lalu dan Growth.',
+ 'Tabel di bawahnya merinci omset, transaksi, unit, APT, UPT, dan pengeluaran per hari. Baris di bawah tabel menunjukkan omset ketiga toko sekaligus.',
+ 'Tekan <b>Salin rekap bulan</b> untuk kirim ringkasan via WhatsApp, atau <b>Unduh CSV</b> untuk dibuka di Excel.'])
++sec('6. Membaca Dashboard',[
+ 'Buka tab <b>Dashboard</b>. Tiga kartu di atas menunjukkan omset tiap toko, lingkaran pencapaian target, dan growth dibanding tahun lalu. Tekan kartu untuk memilih toko.',
+ 'Grafik <b>Omset akumulasi 3 toko</b> membandingkan laju ketiga toko sepanjang bulan. Garis yang lebih tinggi berarti omset lebih besar.',
+ 'Grafik <b>Omset harian</b> toko terpilih: batang hijau adalah omset hari itu, garis oranye omset tahun lalu, garis putus-putus target harian (target bulanan dibagi jumlah hari).',
+ 'Bagian bawah menampilkan rata-rata per hari, proyeksi omset akhir bulan, hari terbaik, porsi Siang vs Malam, dan pengeluaran terbesar per kategori.'])
++sec('7. Menghubungkan banyak perangkat',[
+ 'Buka alamat halaman yang sama di setiap perangkat (HP, laptop, tablet).',
+ 'Masuk dengan email dan kata sandi yang dibuat SPV di Firebase. Setelah masuk, data muncul di semua perangkat dalam hitungan detik.',
+ 'Di perangkat yang sudah berisi data lama, buka tab <b>Pengaturan</b> lalu tekan <b>Unggah data perangkat ini ke penyimpanan bersama</b> satu kali saja.',
+ 'Lihat label di samping judul: <b>Tersinkron</b> berarti data sudah tersimpan untuk semua, <b>Menyimpan</b> berarti sedang dikirim, dan <b>Mode lokal</b> berarti belum masuk sehingga data hanya di perangkat ini.',
+ 'Kasir Siang dan Malam boleh mengisi bersamaan karena tiap shift disimpan terpisah. Jika dua orang mengubah bagian yang sama, yang terakhir menyimpan yang dipakai.'])
++sec('8. Hal penting yang perlu diingat',[
+ 'Data disimpan juga di perangkat sebagai cadangan, tetapi sumber utamanya adalah penyimpanan bersama. Tunggu label <b>Tersinkron</b> sebelum menutup halaman.',
+ 'Data tiap toko terpisah. Pastikan toko yang dipilih sudah benar sebelum mengisi.',
+ 'Untuk mengisi hari yang terlewat, ganti dulu <b>Tanggal laporan</b>, lalu isi seperti biasa.',
+ 'Rutin tekan <b>Unduh CSV</b> di akhir bulan sebagai cadangan.',
+ 'Kalau angka tampak aneh (ATV nol), cek bahwa <b>Total transaksi</b> sudah terisi dan tidak ada titik atau huruf di kolom angka.'])
+}
+function vSet(){
+ const st=S.stores[cur];
+ return `<div class="card"><h2>Pengaturan ${esc(st.name)}</h2><div class="grid">
+ <div><label for="s-name">Nama toko</label><input id="s-name" type="text" data-set="name" value="${esc(st.name)}"></div>
+ <div><label for="s-target">Target omset bulanan (Rp)</label><input id="s-target" type="text" inputmode="numeric" data-money="1" data-set="target" value="${fv(st.target)}"></div>
+ <div><label for="s-atv">Target ATV (Rp)</label><input id="s-atv" type="text" inputmode="numeric" data-money="1" data-set="atv" value="${fv(st.atv)}"></div>
+ <div><label for="s-upt">Target UPT</label><input id="s-upt" type="number" step="0.1" data-set="upt" value="${st.upt}"></div></div>
+ <p style="color:var(--mute)">Data disimpan di penyimpanan bersama sehingga bisa dibuka dari banyak perangkat, dan salinan cadangan tetap ada di perangkat ini. Pakai tombol salin WhatsApp atau unduh CSV untuk melaporkan ke atasan.</p>
+ <div class="row"><button class="btn alt" data-act="upload">Unggah data perangkat ini ke penyimpanan bersama</button><button class="btn alt" data-act="logout" ${AUTHED?'':'hidden'}>Keluar akun</button></div>
+ <p style="color:var(--mute);font-size:13px">Pakai tombol ini sekali di perangkat yang sudah berisi data lama. Data bersama dengan tanggal dan bagian yang sama akan ditimpa.</p></div>`}
+
+function waText(){
+ const st=S.stores[cur],t=dayTotals(cur,date)||{omset:0,trx:0,unit:0,exp:0,pu:0,pn:0},m=monthSum(cur,date),x=day(cur,date);
+ const a=calc(x.siang,st),b=calc(x.malam,st);
+ const line=(l,c)=>`• ${c.t||c.s?'':''}Sales ${rp(c.s)} | Trx ${nf(c.t)} | Unit ${nf(c.u)} | ATV ${rp(c.atv)} (${pct(c.aa)}) | UPT ${c.upt.toFixed(2)} (${pct(c.au)})`;
+ return `📋 *LAPORAN OMSET HARIAN*\n🏪 Toko: ${st.name}\n📅 ${hari(date)}\n\n💰 *OMSET HARI INI*\n• Omset: ${rp(t.omset)}\n• Omset tahun lalu: ${t.ly?rp(t.ly):'-'}\n• Growth: ${t.ly?gr(t.omset,t.ly):'-'}\n• APT: ${t.trx?rp(t.omset/t.trx):'-'} | UPT: ${t.trx?(t.unit/t.trx).toFixed(2):'-'}\n\n📈 *AKUMULASI BULAN INI*\n• Omset: ${rp(m.omset)}\n• Target: ${st.target?rp(st.target):'-'}\n• Pencapaian: ${st.target?pct(m.omset/st.target):'-'}\n• Omset tahun lalu: ${m.ly?rp(m.ly):'-'}\n• Growth: ${m.ly?gr(m.omset,m.ly):'-'}\n\n🎁 *PROMO HARI INI*\n• Unit: ${nf(t.pu)} | Nilai: ${rp(t.pn)}\n\n👥 *KASIR*\nSiang (${x.siang.kasir||'-'})\n${line('s',a)}\nMalam (${x.malam.kasir||'-'})\n${line('m',b)}\n\n💸 *PENGELUARAN*\n• Hari ini: ${rp(t.exp)} (${t.nexp||0} item)\n• Akumulasi bulan: ${rp(m.exp)}${m.omset?' ('+pct(m.exp/m.omset)+' dari omset)':''}`}
+function waRekap(){const st=S.stores[cur],m=monthSum(cur,date);return `📊 *REKAP BULAN ${date.slice(0,7)}*\n🏪 ${st.name}\n• Omset: ${rp(m.omset)}\n• Target: ${st.target?rp(st.target):'-'} (${st.target?pct(m.omset/st.target):'-'})\n• Omset tahun lalu: ${m.ly?rp(m.ly):'-'} (growth ${m.ly?gr(m.omset,m.ly):'-'})\n• APT: ${m.trx?rp(m.omset/m.trx):'-'} | UPT: ${m.trx?(m.unit/m.trx).toFixed(2):'-'}\n• Pengeluaran: ${rp(m.exp)}\n• Hari terisi: ${m.days.length}`}
+async function copy(t){try{await navigator.clipboard.writeText(t);toast('Tersalin, tinggal tempel di WhatsApp')}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('Tersalin')}catch(_){toast('Gagal menyalin')}a.remove()}}
+function csv(){const st=S.stores[cur],m=monthSum(cur,date);let o='Tanggal,Omset,Omset Tahun Lalu,Transaksi,Unit,Pengeluaran\n';m.days.forEach(d=>{const t=dayTotals(cur,d);o+=[d,t.omset,t.ly,t.trx,t.unit,t.exp].join(',')+'\n'});
+ const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(o);a.download='rekap-'+st.name.replace(/[^A-Za-z0-9]+/g,'-')+'-'+date.slice(0,7)+'.csv';a.click()}
+
+document.addEventListener('click',e=>{
+ const t=e.target.closest('button');if(!t)return;
+ if(t.dataset.store!=null){cur=+t.dataset.store;render();paintInput()}
+ else if(t.dataset.view){view=t.dataset.view;render();paintInput()}
+ else if(t.dataset.act=='addExp'){const q=$('#eq').value,h=$('#eh').value.replace(/\D/g,''),i=$('#ei').value.trim();if(!i||!n(h)){toast('Isi item dan harga satuan');return}
+  day(cur,date).exp.push({cat:$('#ec').value,item:i,qty:q||1,harga:h});save();push(cur,date,'exp');$('#ei').value='';$('#eh').value='';paintInput()}
+ else if(t.dataset.del!=null){day(cur,date).exp.splice(+t.dataset.del,1);save();push(cur,date,'exp');paintInput()}
+ else if(t.dataset.act=='applyLy'){const L=$('#bulk').value.split(/\r?\n/);lyRows().forEach((d,i)=>{const v=(L[i]||'').replace(/[^0-9]/g,'');if(v){day(cur,d).ly=v;push(cur,d,'ly')}});save();render();toast('Data pembanding diterapkan')}
+ else if(t.dataset.act=='upload')uploadLocal();
+ else if(t.dataset.act=='logout')logout();
+ else if(t.dataset.act=='wa')copy(waText());
+ else if(t.dataset.act=='waRekap')copy(waRekap());
+ else if(t.dataset.act=='csv')csv();
+});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset.money!=null)fmtMoney(t);
+ if(t.dataset.sh){day(cur,date)[t.dataset.sh][t.dataset.f]=V(t);save();push(cur,date,t.dataset.sh);paintInput()}
+ else if(t.dataset.lyd){const d=t.dataset.lyd;day(cur,d).ly=V(t);save();push(cur,d,'ly');const tt=dayTotals(cur,d);t.closest('tr').querySelector('.g').textContent=tt.ly&&tt.omset?gr(tt.omset,tt.ly):'-';paintBanding()}
+ else if(t.dataset.ly){day(cur,date).ly=V(t);save();push(cur,date,'ly');paintInput()}
+ else if(t.dataset.set){const k=t.dataset.set;S.stores[cur][k]=k=='name'?t.value:n(V(t));save();pushCfg();if(k=='name')head()}
+});
+document.addEventListener('change',e=>{if(e.target.id=='tgl'&&e.target.value){date=e.target.value;render();paintInput()}});
+render();paintInput();initSync();
+</script>
+</body>
+</html>
